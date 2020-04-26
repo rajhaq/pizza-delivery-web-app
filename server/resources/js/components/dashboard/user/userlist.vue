@@ -9,7 +9,7 @@
                     <v-icon dark>face</v-icon>
                 </v-avatar>
 
-                <v-toolbar-title class="ml-4 deep-purple--text" >{{$t('message.user.list')}}</v-toolbar-title>
+                <v-toolbar-title class="ml-4 deep-purple--text" >User List</v-toolbar-title>
 
                 <v-spacer></v-spacer>
                 <v-text-field

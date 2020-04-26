@@ -7508,7 +7508,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("v-toolbar-title", { staticClass: "ml-4 deep-purple--text" }, [
-                _vm._v(_vm._s(_vm.$t("message.user.list")))
+                _vm._v("User List")
               ]),
               _vm._v(" "),
               _c("v-spacer"),
