@@ -5,6 +5,7 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Pizza;
+use App\PizzaTopping;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +13,7 @@ class PizzaController extends Controller
 {
     public function index()
     {
-        $data=Topping::orderBy('id','ASC');    
+        $data=Pizza::orderBy('id','ASC');    
         if(isset($request->type) && !empty($request->type))
         {
             $data= $data->where('type',$request->type);
@@ -44,8 +45,37 @@ class PizzaController extends Controller
 
         try {
             $user_id = Auth::id();
-            $request['user_id']=$user_id;    
-            $response['data']=Topping::create($request->all());           
+            $response['data']=Pizza::create(
+                [
+                    "user_id" => $user_id,
+                    "category_id" => $request->category_id,
+                    "name" => $request->name,
+                    "description" => $request->description,
+                    "image" => $request->image,
+                    "base_image" => $request->base_image,
+                    "large" => $request->large,
+                    "medium" => $request->medium,
+                    "small" => $request->small,
+                    "pan" => $request->pan,
+                    "thin" => $request->thin,
+                    "cheesy" => $request->cheesy,
+                    "sfo" => $request->sfo,
+                    "status" => $request->status,
+                ]
+            );     
+            if(count($request->toppings))
+            {
+                foreach($request->toppings as $topping)
+                {
+                    // dd($product['product_id']);
+                    // $product=json_decode($product);
+                    // dd($product['quantity']);
+                    PizzaTopping::create([
+                        'pizza_id' => $response['data']->id,
+                        'topping_id' => $topping,
+                    ]);
+                }
+            }      
             DB::commit();
             $response['status'] = true;
         } catch (\Exception $e) {
@@ -83,13 +113,43 @@ class PizzaController extends Controller
         DB::beginTransaction();
 
         try {
-            $response['data']=Topping::where('id',$id)
-            ->update($request->all());           
+            $user_id = Auth::id();
+            $response['data']=Pizza::where('id',$id)
+            ->update(
+                [
+                    "category_id" => $request->category_id,
+                    "name" => $request->name,
+                    "description" => $request->description,
+                    "image" => $request->image,
+                    "base_image" => $request->base_image,
+                    "large" => $request->large,
+                    "medium" => $request->medium,
+                    "small" => $request->small,
+                    "pan" => $request->pan,
+                    "thin" => $request->thin,
+                    "cheesy" => $request->cheesy,
+                    "sfo" => $request->sfo,
+                    "status" => $request->status,
+                ]
+            );  
+            PizzaTopping::where('pizza_id',$id)->delete();
+            if(count($request->toppings))
+            {
+                foreach($request->toppings as $topping)
+                {
+                    // dd($product['product_id']);
+                    // $product=json_decode($product);
+                    // dd($product['quantity']);
+                    PizzaTopping::create([
+                        'pizza_id' => $id,
+                        'topping_id' => $topping,
+                    ]);
+                }
+            }            
             DB::commit();
             $response['status'] = true;
         } catch (\Exception $e) {
-            $data=$e->getMessage();
-            $status = false;
+            $response['data']=$e->getMessage()."line".$e->getLine();
             DB::rollback();
         }
 
@@ -99,7 +159,7 @@ class PizzaController extends Controller
     {
         $response=array();
         $response['status']=false;
-        $response['data'] = Topping::find($id);
+        $response['data'] = Pizza::find($id);
         if($response['data'])
         {
                 $response['data']=$response['data']->delete();

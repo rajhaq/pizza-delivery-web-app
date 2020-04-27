@@ -45,8 +45,9 @@
 				<v-icon>mdi-plus</v-icon>
 			</v-btn>
 		</v-container>
-        <v-dialog v-model="dialog" max-width="500px" persistent>
+        <v-dialog v-model="dialog" max-width="700px" persistent>
 			<ImageModule :toggle="isImage" @send="receiveImage" @cancel="cancel"/>
+			<ImageModule :toggle="isImageBase" @send="receiveBaseImage" @cancel="cancel"/>
             <v-card>
 				<v-card color="primary" dark tile flat >
 					<v-card-title
@@ -61,6 +62,20 @@
                     <v-container >
 						<v-form ref="form" v-model="valid">
                         <v-row>
+							<v-col cols="12">
+									<v-select
+										v-model="editedItem.category_id"
+										:items="dataCategory"
+										item-text="name"
+										item-value="id"
+										:rules="[v => !!v || 'Category is required']"
+										label="Category*"
+										required
+										outlined
+									></v-select>
+								</v-col>
+
+									
                                 <v-col cols="12">
 									<v-text-field
 										v-model="editedItem.name"
@@ -71,27 +86,116 @@
 									></v-text-field>
 								</v-col>
                                 <v-col cols="12">
+									<v-textarea
+										v-model="editedItem.description"
+										label="Description*"
+										:rules="[v => !!v || 'Description is required']"
+                                        required
+										outlined
+									></v-textarea>
+								</v-col>
+								<v-col cols="12">
+								<v-card>
+									<v-card-title primary-title>
+										Size's Price
+									</v-card-title>
+									<v-card-text>
+										<v-row >										
+										<v-col cols="4">
+											<v-text-field
+												v-model="editedItem.large"
+												label="Large Price*"
+												:rules="[v => !!v || 'Large is required']"
+												required
+												outlined
+											></v-text-field>
+										</v-col>
+										<v-col cols="4">
+											<v-text-field
+												v-model="editedItem.medium"
+												label="Medium Price*"
+												:rules="[v => !!v || 'Medium is required']"
+												required
+												outlined
+											></v-text-field>
+										</v-col>
+										<v-col cols="4">
+											<v-text-field
+												v-model="editedItem.small"
+												label="Small Price*"
+												:rules="[v => !!v || 'Small is required']"
+												required
+												outlined
+											></v-text-field>
+									</v-col>
+										</v-row>
+									</v-card-text>
+								</v-card>
+								</v-col>
+								<v-col cols="12">
+								<v-card>
+									<v-card-title primary-title>
+										Crust Type Extra Price
+									</v-card-title>
+									<v-card-text>
+										<v-row >										
+
+								<v-col cols="6">
 									<v-text-field
-										v-model="editedItem.price"
-										label="Name*"
-										:rules="[v => !!v || 'Price is required']"
+										v-model="editedItem.pan"
+										label="Pan*"
+										:rules="[v => !!v || 'Pan is required']"
+                                        required
+										outlined
+										hint="Extra price amount"
+									></v-text-field>
+								</v-col>
+								<v-col cols="6">
+									<v-text-field
+										v-model="editedItem.thin"
+										label="Thin N Crispy*"
+										:rules="[v => !!v || 'Thin N Crispy is required']"
                                         required
 										outlined
 									></v-text-field>
 								</v-col>
+								<v-col cols="6">
+									<v-text-field
+										v-model="editedItem.cheesy"
+										label="Cheesy Crunch*"
+										:rules="[v => !!v || 'Cheesy Crunch is required']"
+                                        required
+										outlined
+									></v-text-field>
+								</v-col>
+								<v-col cols="6">
+									<v-text-field
+										v-model="editedItem.sfo"
+										label="SFO*"
+										:rules="[v => !!v || 'SFO is required']"
+                                        required
+										outlined
+									></v-text-field>
+								</v-col>
+										</v-row>
+									</v-card-text>
+								</v-card>
+								</v-col>
 								<v-col cols="12">
 									<v-select
-										v-model="editedItem.status"
-										:items="dataStatus"
+										v-model="editedItem.toppings"
+										:items="dataTopping"
 										item-text="name"
-										item-value="value"
-										:rules="[v => !!v || 'Status is required']"
-										label="Status"
+										item-value="id"
+										:rules="[v => !!v || 'Topping is required']"
+										label="Toppings*"
+										chips
+										multiple
 										required
 										outlined
 									></v-select>
 								</v-col>
-								<v-col cols="12">
+								<v-col cols="6">
 									 <v-card
 										class="mx-auto"
 										width="180"
@@ -117,6 +221,45 @@
 									
 									 </v-card>
 								</v-col>
+								<v-col cols="6">
+									 <v-card
+										class="mx-auto"
+										width="180"
+										outlined
+										align="center"
+										justify="center"
+									>
+									<v-img
+                                    :src="editedItem.base_image?editedItem.image:'/images/plus.png'"
+                                    aspect-ratio="1"
+									@click="isImageBase=!isImageBase"
+                                    >
+									</v-img>
+									<v-card-subtitle v-if="!editedItem.base_image">Add base pizza</v-card-subtitle>
+									<v-card-text v-else class="my-2">
+										<v-btn x-small color="primary" @click="isImageBase=!isImageBase">
+											Change
+										</v-btn>
+										<v-btn x-small color="primary" @click="editedItem.base_image=''">
+											Remove
+										</v-btn>
+									</v-card-text>
+									
+									 </v-card>
+								</v-col>
+								<v-col cols="12">
+									<v-select
+										v-model="editedItem.status"
+										:items="dataStatus"
+										item-text="name"
+										item-value="value"
+										:rules="[v => !!v || 'Status is required']"
+										label="Status"
+										required
+										outlined
+									></v-select>
+								</v-col>
+								
 	                        </v-row>
 						</v-form>
                     </v-container>
@@ -164,6 +307,7 @@ export default {
 		DeleteModal
 	},
 	data: () => ({
+		isImageBase:false,
 		isImage:false,
 		valid:false,
 		type: 'hex',
@@ -174,6 +318,8 @@ export default {
 		edit: true,
 		dialog: false,
         dataList: [],
+        dataCategory: [],
+        dataTopping: [],
         
 		headers: [
 			{ text: "Image", value: "image" },
@@ -185,31 +331,35 @@ export default {
 		editedItem: {
 			user_id: "",
 			category_id: "",
-			category_name: "",
 			name: "",
 			description: "",
 			image: "",
+			base_image: "",			
+			large: "",
 			medium: "",
 			small: "",
 			pan: "",
 			thin: "",
 			cheesy: "",
 			sfo: "",
+			toppings:[],
 			status: 1
 		},
 		defaultItem: {
-			user_id: "",
+						user_id: "",
 			category_id: "",
-			category_name: "",
 			name: "",
 			description: "",
 			image: "",
+			base_image: "",			
+			large: "",
 			medium: "",
 			small: "",
 			pan: "",
 			thin: "",
 			cheesy: "",
 			sfo: "",
+			toppings:[],
 			status: 1
 		},
 		rules: [
@@ -241,9 +391,16 @@ export default {
 			this.editedItem.image=item.src
 
 		},
+		receiveBaseImage(item)
+		{
+			this.isImageBase=!this.isImageBase;
+			this.editedItem.base_image=item.src
+
+		},
 		cancel()
 		{
 			this.isImage=!this.isImage;
+			this.isBaseImage=!this.isBaseImage;
 
 		},
 		async initialize() {
@@ -251,9 +408,31 @@ export default {
 			try {
 				let { data } = await axios({
 					method: "get",
-					url: "/app/topping"
+					url: "/app/pizza"
 				});
 				this.dataList = data;
+				this.loading=false;
+			} catch (e) {
+				this.loading=false;
+				
+			}
+			try {
+				let { data } = await axios({
+					method: "get",
+					url: "/app/category"
+				});
+				this.dataCategory = data;
+				this.loading=false;
+			} catch (e) {
+				this.loading=false;
+				
+            }
+			try {
+				let { data } = await axios({
+					method: "get",
+					url: "/app/topping"
+				});
+				this.dataTopping = data;
 				this.loading=false;
 			} catch (e) {
 				this.loading=false;
@@ -296,7 +475,7 @@ export default {
 				try {
 					let { data } = await axios({
 						method: "put",
-						url: "/app/topping/" + this.editedItem.id,
+						url: "/app/pizza/" + this.editedItem.id,
 						data: this.editedItem
 					});
 					if (data.status) {
@@ -315,7 +494,7 @@ export default {
 				try {
 					let { data } = await axios({
 						method: "post",
-						url: "/app/topping",
+						url: "/app/pizza",
 						data: this.editedItem
 					});
 					if (data.status) {

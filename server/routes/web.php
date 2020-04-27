@@ -23,6 +23,7 @@ Route::prefix('/app')->group(function () {
     Route::resource('/user', 'dashboard\UserController');
     Route::resource('/category', 'dashboard\CategoryController');
     Route::resource('/topping', 'dashboard\ToppingController');
+    Route::resource('/pizza', 'dashboard\PizzaController');
     Route::resource('/folder', 'dashboard\ImageFolderController');
     Route::resource('/image', 'dashboard\ImageController');
 

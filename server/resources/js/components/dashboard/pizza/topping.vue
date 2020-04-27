@@ -73,7 +73,7 @@
                                 <v-col cols="12">
 									<v-text-field
 										v-model="editedItem.price"
-										label="Name*"
+										label="Price*"
 										:rules="[v => !!v || 'Price is required']"
                                         required
 										outlined
@@ -184,14 +184,14 @@ export default {
 		editedIndex: -1,
 		editedItem: {
 			user_id: "",
-			group_id: "",
+			price: "",
 			name: "",
 			image: "",
 			status: 1
 		},
 		defaultItem: {
 			user_id: "",
-			group_id: "",
+			price: "",
 			name: "",
 			image: "",
 			status: 1

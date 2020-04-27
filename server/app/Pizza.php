@@ -10,4 +10,9 @@ class Pizza extends Model
 {
     use SoftDeletes;
     protected $guarded = [];
+    public function topping()
+    {
+       return $this->HasMany('App\PizzaTopping');
+    }
 }
+

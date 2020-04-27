@@ -3665,6 +3665,149 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3680,6 +3823,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      isImageBase: false,
       isImage: false,
       valid: false,
       type: 'hex',
@@ -3690,6 +3834,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       edit: true,
       dialog: false,
       dataList: [],
+      dataCategory: [],
+      dataTopping: [],
       headers: [{
         text: "Image",
         value: "image"
@@ -3707,31 +3853,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editedItem: {
         user_id: "",
         category_id: "",
-        category_name: "",
         name: "",
         description: "",
         image: "",
+        base_image: "",
+        large: "",
         medium: "",
         small: "",
         pan: "",
         thin: "",
         cheesy: "",
         sfo: "",
+        toppings: [],
         status: 1
       },
       defaultItem: {
         user_id: "",
         category_id: "",
-        category_name: "",
         name: "",
         description: "",
         image: "",
+        base_image: "",
+        large: "",
         medium: "",
         small: "",
         pan: "",
         thin: "",
         cheesy: "",
         sfo: "",
+        toppings: [],
         status: 1
       },
       rules: [function (value) {
@@ -3764,14 +3914,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.isImage = !this.isImage;
       this.editedItem.image = item.src;
     },
+    receiveBaseImage: function receiveBaseImage(item) {
+      this.isImageBase = !this.isImageBase;
+      this.editedItem.base_image = item.src;
+    },
     cancel: function cancel() {
       this.isImage = !this.isImage;
+      this.isBaseImage = !this.isBaseImage;
     },
     initialize: function initialize() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _yield$axios, data;
+        var _yield$axios, data, _yield$axios2, _data, _yield$axios3, _data2;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
@@ -3782,7 +3937,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 4;
                 return axios({
                   method: "get",
-                  url: "/app/topping"
+                  url: "/app/pizza"
                 });
 
               case 4:
@@ -3799,11 +3954,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.loading = false;
 
               case 13:
+                _context.prev = 13;
+                _context.next = 16;
+                return axios({
+                  method: "get",
+                  url: "/app/category"
+                });
+
+              case 16:
+                _yield$axios2 = _context.sent;
+                _data = _yield$axios2.data;
+                _this.dataCategory = _data;
+                _this.loading = false;
+                _context.next = 25;
+                break;
+
+              case 22:
+                _context.prev = 22;
+                _context.t1 = _context["catch"](13);
+                _this.loading = false;
+
+              case 25:
+                _context.prev = 25;
+                _context.next = 28;
+                return axios({
+                  method: "get",
+                  url: "/app/topping"
+                });
+
+              case 28:
+                _yield$axios3 = _context.sent;
+                _data2 = _yield$axios3.data;
+                _this.dataTopping = _data2;
+                _this.loading = false;
+                _context.next = 37;
+                break;
+
+              case 34:
+                _context.prev = 34;
+                _context.t2 = _context["catch"](25);
+                _this.loading = false;
+
+              case 37:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[1, 10]]);
+        }, _callee, null, [[1, 10], [13, 22], [25, 34]]);
       }))();
     },
     editItem: function editItem(item) {
@@ -3833,7 +4030,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var _yield$axios2, data, _yield$axios3, _data;
+        var _yield$axios4, data, _yield$axios5, _data3;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
@@ -3860,13 +4057,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.next = 8;
                 return axios({
                   method: "put",
-                  url: "/app/topping/" + _this3.editedItem.id,
+                  url: "/app/pizza/" + _this3.editedItem.id,
                   data: _this3.editedItem
                 });
 
               case 8:
-                _yield$axios2 = _context2.sent;
-                data = _yield$axios2.data;
+                _yield$axios4 = _context2.sent;
+                data = _yield$axios4.data;
 
                 if (data.status) {
                   _this3.snacks("Successfully Updated", "green");
@@ -3900,22 +4097,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.next = 22;
                 return axios({
                   method: "post",
-                  url: "/app/topping",
+                  url: "/app/pizza",
                   data: _this3.editedItem
                 });
 
               case 22:
-                _yield$axios3 = _context2.sent;
-                _data = _yield$axios3.data;
+                _yield$axios5 = _context2.sent;
+                _data3 = _yield$axios5.data;
 
-                if (_data.status) {
-                  _this3.dataList.unshift(_data.data);
+                if (_data3.status) {
+                  _this3.dataList.unshift(_data3.data);
 
                   _this3.snacks("Successfully Added", "green");
 
                   _this3.close();
                 } else {
-                  _this3.snacks("Failed! " + _data.data, "red");
+                  _this3.snacks("Failed! " + _data3.data, "red");
 
                   _this3.loading = false;
                 }
@@ -3958,7 +4155,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_Breadcrumbs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../common/Breadcrumbs */ "./resources/js/components/common/Breadcrumbs.vue");
 /* harmony import */ var _common_ToolbarLeft__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../common/ToolbarLeft */ "./resources/js/components/common/ToolbarLeft.vue");
 /* harmony import */ var _common_NoDataList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../common/NoDataList */ "./resources/js/components/common/NoDataList.vue");
-/* harmony import */ var _common_ImageModule__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../../common/ImageModule */ "./resources/js/components/common/ImageModule.vue");
+/* harmony import */ var _common_ImageModule__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../common/ImageModule */ "./resources/js/components/common/ImageModule.vue");
 /* harmony import */ var _common_DeleteModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../common/DeleteModal */ "./resources/js/components/common/DeleteModal.vue");
 
 
@@ -4127,7 +4324,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Breadcrumbs: _common_Breadcrumbs__WEBPACK_IMPORTED_MODULE_1__["default"],
     ToolbarLeft: _common_ToolbarLeft__WEBPACK_IMPORTED_MODULE_2__["default"],
     NoDataList: _common_NoDataList__WEBPACK_IMPORTED_MODULE_3__["default"],
-    ImageModule: _common_ImageModule__WEBPACK_IMPORTED_MODULE_6__["default"],
+    ImageModule: _common_ImageModule__WEBPACK_IMPORTED_MODULE_4__["default"],
     DeleteModal: _common_DeleteModal__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   data: function data() {
@@ -4158,14 +4355,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editedIndex: -1,
       editedItem: {
         user_id: "",
-        group_id: "",
+        price: "",
         name: "",
         image: "",
         status: 1
       },
       defaultItem: {
         user_id: "",
-        group_id: "",
+        price: "",
         name: "",
         image: "",
         status: 1
@@ -10360,7 +10557,7 @@ var render = function() {
       _c(
         "v-dialog",
         {
-          attrs: { "max-width": "500px", persistent: "" },
+          attrs: { "max-width": "700px", persistent: "" },
           model: {
             value: _vm.dialog,
             callback: function($$v) {
@@ -10373,6 +10570,11 @@ var render = function() {
           _c("ImageModule", {
             attrs: { toggle: _vm.isImage },
             on: { send: _vm.receiveImage, cancel: _vm.cancel }
+          }),
+          _vm._v(" "),
+          _c("ImageModule", {
+            attrs: { toggle: _vm.isImageBase },
+            on: { send: _vm.receiveBaseImage, cancel: _vm.cancel }
           }),
           _vm._v(" "),
           _c(
@@ -10418,6 +10620,40 @@ var render = function() {
                                 "v-col",
                                 { attrs: { cols: "12" } },
                                 [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.dataCategory,
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      rules: [
+                                        function(v) {
+                                          return !!v || "Category is required"
+                                        }
+                                      ],
+                                      label: "Category*",
+                                      required: "",
+                                      outlined: ""
+                                    },
+                                    model: {
+                                      value: _vm.editedItem.category_id,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "category_id",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editedItem.category_id"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
                                   _c("v-text-field", {
                                     attrs: {
                                       label: "Name*",
@@ -10445,23 +10681,29 @@ var render = function() {
                                 "v-col",
                                 { attrs: { cols: "12" } },
                                 [
-                                  _c("v-text-field", {
+                                  _c("v-textarea", {
                                     attrs: {
-                                      label: "Name*",
+                                      label: "Description*",
                                       rules: [
                                         function(v) {
-                                          return !!v || "Price is required"
+                                          return (
+                                            !!v || "Description is required"
+                                          )
                                         }
                                       ],
                                       required: "",
                                       outlined: ""
                                     },
                                     model: {
-                                      value: _vm.editedItem.price,
+                                      value: _vm.editedItem.description,
                                       callback: function($$v) {
-                                        _vm.$set(_vm.editedItem, "price", $$v)
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "description",
+                                          $$v
+                                        )
                                       },
-                                      expression: "editedItem.price"
+                                      expression: "editedItem.description"
                                     }
                                   })
                                 ],
@@ -10472,26 +10714,353 @@ var render = function() {
                                 "v-col",
                                 { attrs: { cols: "12" } },
                                 [
+                                  _c(
+                                    "v-card",
+                                    [
+                                      _c(
+                                        "v-card-title",
+                                        { attrs: { "primary-title": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\tSize's Price\n\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-card-text",
+                                        [
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "4" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Large Price*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "Large is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.large,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "large",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.large"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "4" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Medium Price*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "Medium is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.medium,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "medium",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.medium"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "4" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Small Price*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "Small is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.small,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "small",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.small"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c(
+                                    "v-card",
+                                    [
+                                      _c(
+                                        "v-card-title",
+                                        { attrs: { "primary-title": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\tCrust Type Extra Price\n\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-card-text",
+                                        [
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "6" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Pan*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "Pan is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: "",
+                                                      hint: "Extra price amount"
+                                                    },
+                                                    model: {
+                                                      value: _vm.editedItem.pan,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "pan",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.pan"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "6" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Thin N Crispy*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "Thin N Crispy is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.thin,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "thin",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.thin"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "6" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Cheesy Crunch*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "Cheesy Crunch is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.cheesy,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "cheesy",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.cheesy"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "6" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "SFO*",
+                                                      rules: [
+                                                        function(v) {
+                                                          return (
+                                                            !!v ||
+                                                            "SFO is required"
+                                                          )
+                                                        }
+                                                      ],
+                                                      required: "",
+                                                      outlined: ""
+                                                    },
+                                                    model: {
+                                                      value: _vm.editedItem.sfo,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "sfo",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.sfo"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
                                   _c("v-select", {
                                     attrs: {
-                                      items: _vm.dataStatus,
+                                      items: _vm.dataTopping,
                                       "item-text": "name",
-                                      "item-value": "value",
+                                      "item-value": "id",
                                       rules: [
                                         function(v) {
-                                          return !!v || "Status is required"
+                                          return !!v || "Topping is required"
                                         }
                                       ],
-                                      label: "Status",
+                                      label: "Toppings*",
+                                      chips: "",
+                                      multiple: "",
                                       required: "",
                                       outlined: ""
                                     },
                                     model: {
-                                      value: _vm.editedItem.status,
+                                      value: _vm.editedItem.toppings,
                                       callback: function($$v) {
-                                        _vm.$set(_vm.editedItem, "status", $$v)
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "toppings",
+                                          $$v
+                                        )
                                       },
-                                      expression: "editedItem.status"
+                                      expression: "editedItem.toppings"
                                     }
                                   })
                                 ],
@@ -10500,7 +11069,7 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "v-col",
-                                { attrs: { cols: "12" } },
+                                { attrs: { cols: "6" } },
                                 [
                                   _c(
                                     "v-card",
@@ -10581,6 +11150,124 @@ var render = function() {
                                     ],
                                     1
                                   )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c(
+                                    "v-card",
+                                    {
+                                      staticClass: "mx-auto",
+                                      attrs: {
+                                        width: "180",
+                                        outlined: "",
+                                        align: "center",
+                                        justify: "center"
+                                      }
+                                    },
+                                    [
+                                      _c("v-img", {
+                                        attrs: {
+                                          src: _vm.editedItem.base_image
+                                            ? _vm.editedItem.image
+                                            : "/images/plus.png",
+                                          "aspect-ratio": "1"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            _vm.isImageBase = !_vm.isImageBase
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      !_vm.editedItem.base_image
+                                        ? _c("v-card-subtitle", [
+                                            _vm._v("Add base pizza")
+                                          ])
+                                        : _c(
+                                            "v-card-text",
+                                            { staticClass: "my-2" },
+                                            [
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: {
+                                                    "x-small": "",
+                                                    color: "primary"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.isImageBase = !_vm.isImageBase
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\tChange\n\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: {
+                                                    "x-small": "",
+                                                    color: "primary"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.editedItem.base_image =
+                                                        ""
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\tRemove\n\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.dataStatus,
+                                      "item-text": "name",
+                                      "item-value": "value",
+                                      rules: [
+                                        function(v) {
+                                          return !!v || "Status is required"
+                                        }
+                                      ],
+                                      label: "Status",
+                                      required: "",
+                                      outlined: ""
+                                    },
+                                    model: {
+                                      value: _vm.editedItem.status,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.editedItem, "status", $$v)
+                                      },
+                                      expression: "editedItem.status"
+                                    }
+                                  })
                                 ],
                                 1
                               )
@@ -10952,7 +11639,7 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      label: "Name*",
+                                      label: "Price*",
                                       rules: [
                                         function(v) {
                                           return !!v || "Price is required"
