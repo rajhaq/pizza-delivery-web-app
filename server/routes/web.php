@@ -21,6 +21,11 @@ Route::get('/logoutuser', 'dashboard\UserController@logout');
 Route::prefix('/app')->group(function () {
     Route::resource('/dashboard', 'dashboard\DashboardController');
     Route::resource('/user', 'dashboard\UserController');
+    Route::resource('/category', 'dashboard\CategoryController');
+    Route::resource('/topping', 'dashboard\ToppingController');
+    Route::resource('/folder', 'dashboard\ImageFolderController');
+    Route::resource('/image', 'dashboard\ImageController');
+
      
 });
 Route::post('/app/changepassword', 'dashboard\UserController@changePass');
@@ -30,4 +35,5 @@ Route::get('/app/profile', 'dashboard\UserController@profile');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/{slug}', 'HomeController@index');
 Route::get('/{slug}/{child}', 'HomeController@index');

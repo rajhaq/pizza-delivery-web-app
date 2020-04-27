@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateToppingsTable extends Migration
+class CreateImageFoldersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,23 @@ class CreateToppingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('toppings', function (Blueprint $table) {
+        Schema::create('image_folders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('parent_id')->default(0);
             $table->string('name');
-            $table->string('image');
-            $table->string('price');
+            $table->text('description')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
+            $table->foreign('parent_id')
+            ->references('id')
+            ->on('image_folders')
+            ->onDelete('cascade');
         });
     }
 
@@ -32,6 +40,6 @@ class CreateToppingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('toppings');
+        Schema::dropIfExists('image_folders');
     }
 }

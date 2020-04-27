@@ -21,6 +21,14 @@ class CreateCartToppingsTable extends Migration
             $table->integer('price')->nullable();
             $table->integer('image')->nullable();
             $table->timestamps();
+
+            $table->foreign('cart_id')
+            ->references('id')->on('carts')
+            ->onDelete('cascade');
+            $table->foreign('topping_id')
+            ->references('id')->on('toppings')
+            ->onDelete('cascade');
+            
         });
     }
 

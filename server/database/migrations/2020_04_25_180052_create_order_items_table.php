@@ -22,7 +22,15 @@ class CreateOrderItemsTable extends Migration
             $table->integer('type')->nullable();
             $table->integer('total_price')->nullable();
             $table->integer('qunatity')->nullable();
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('order_id')
+            ->references('id')->on('orders')
+            ->onDelete('cascade');
+            $table->foreign('pizza_id')
+            ->references('id')->on('pizzas')
+            ->onDelete('cascade');
         });
     }
 

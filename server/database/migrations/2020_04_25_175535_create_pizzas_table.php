@@ -30,6 +30,7 @@ class CreatePizzasTable extends Migration
             $table->integer('cheesy');
             $table->integer('sfo')->nullable();
             $table->integer('status')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

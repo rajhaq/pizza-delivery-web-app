@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('guest_id')->nullable();
             $table->integer('total_price');
+            $table->string('type');
             $table->string('name');
             $table->string('number');
             $table->text('address');
@@ -25,6 +26,8 @@ class CreateOrdersTable extends Migration
             $table->double('lat')->nullable();
             $table->double('lon')->nullable();
             $table->integer('status')->default(1);
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

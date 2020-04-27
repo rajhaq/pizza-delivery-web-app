@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CartTopping extends Model
+class PizzaTopping extends Model
 {
-    protected $guarded = [];
+    //
 }

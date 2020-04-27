@@ -24,6 +24,7 @@ class CreateCartsTable extends Migration
             $table->integer('total_price')->nullable();
             $table->integer('qunatity')->nullable();
             $table->integer('status')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

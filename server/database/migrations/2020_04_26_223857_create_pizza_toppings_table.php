@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderToppingsTable extends Migration
+class CreatePizzaToppingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,19 @@ class CreateOrderToppingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_toppings', function (Blueprint $table) {
+        Schema::create('pizza_toppings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_item_id')->nullable();
+            $table->unsignedBigInteger('pizza_id')->nullable();
             $table->unsignedBigInteger('topping_id')->nullable();
-            $table->string('name')->nullable();
-            $table->integer('price')->nullable();
-            $table->integer('image')->nullable();
             $table->timestamps();
 
-            $table->foreign('order_item_id')
-            ->references('id')->on('order_items')
-            ->onDelete('cascade');
             $table->foreign('topping_id')
             ->references('id')->on('toppings')
             ->onDelete('cascade');
+            $table->foreign('pizza_id')
+            ->references('id')->on('pizzas')
+            ->onDelete('cascade');
+
         });
     }
 
@@ -38,6 +36,6 @@ class CreateOrderToppingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_toppings');
+        Schema::dropIfExists('pizza_toppings');
     }
 }

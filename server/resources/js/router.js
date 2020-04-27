@@ -8,6 +8,10 @@ import user from './components/dashboard/user/Home.vue'
 import userlist from './components/dashboard/user/userlist.vue'
 import profile from './components/dashboard/user/profile.vue'
 
+import pizzaHome from './components/dashboard/pizza/Home.vue'
+import pizza from './components/dashboard/pizza/pizza.vue'
+import category from './components/dashboard/pizza/category.vue'
+import topping from './components/dashboard/pizza/topping.vue'
 
 let onlyAdmin = [1,2]
 let allUser = [1,2,3, 4]
@@ -53,6 +57,57 @@ export default new Router({
         
                     }
                 },
+            ]
+
+        },
+        {
+            path: '/pizza',
+            name: 'pizza',
+            component: pizzaHome,
+            meta: {
+                icon: 'local_pizza',
+                title: "Pizza",
+                type: onlyAdmin,
+                status: true,
+            },
+            children: [
+                {
+                    path: 'category',
+                    name: 'category',
+                    component: category,
+                    meta: {
+                        icon: 'bookmarks',
+                        title: "Category",
+                        type: onlyAdmin,
+                        status: true,
+        
+                    }
+                },
+                {
+                    path: 'topping',
+                    name: 'topping',
+                    component: topping,
+                    meta: {
+                        icon: 'eco',
+                        title: "Topping",
+                        type: onlyAdmin,
+                        status: true,
+        
+                    }
+                },
+                {
+                    path: 'pizza',
+                    name: 'pizza',
+                    component: pizza,
+                    meta: {
+                        icon: 'local_pizza',
+                        title: "Pizza",
+                        type: onlyAdmin,
+                        status: true,
+        
+                    }
+                },
+                
             ]
 
         },
