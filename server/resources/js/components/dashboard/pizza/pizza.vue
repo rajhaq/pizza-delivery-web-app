@@ -324,6 +324,9 @@ export default {
 		headers: [
 			{ text: "Image", value: "image" },
 			{ text: "Name", value: "name" },
+			{ text: "Large", value: "large" },
+			{ text: "Medium", value: "medium" },
+			{ text: "Small", value: "small" },
 			{ text: "Status", value: "status" },
 			{ text: "Action", value: "action" }
 		],

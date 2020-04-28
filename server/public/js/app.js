@@ -3843,6 +3843,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Name",
         value: "name"
       }, {
+        text: "Large",
+        value: "large"
+      }, {
+        text: "Medium",
+        value: "medium"
+      }, {
+        text: "Small",
+        value: "small"
+      }, {
         text: "Status",
         value: "status"
       }, {
