@@ -21,9 +21,11 @@ class CreatePizzasTable extends Migration
             $table->string('description');
             $table->string('image');
             $table->string('base_image')->nullabel();
+            $table->string('size')->default('large');
             $table->integer('large');
             $table->integer('medium');
             $table->integer('small');
+            $table->string('type')->default('pan');
             $table->integer('pan')->nullable();
             $table->integer('thin');
             $table->integer('cheesy');

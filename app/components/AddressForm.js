@@ -5,8 +5,23 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-export default function AddressForm() {
-  return (
+export default class UserList extends React.Component {
+  constructor()
+    {
+        super();
+        this.state={
+            users:[],
+            filtered:[],
+            loading:true,
+            searchValue:''
+        };
+        this.handleSearchChange = (searchValue) => {
+            this.setState({searchValue});
+            this.filter();
+          };
+    }
+  render() {
+    return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Shipping address
@@ -93,4 +108,5 @@ export default function AddressForm() {
       </Grid>
     </React.Fragment>
   );
+    }
 }

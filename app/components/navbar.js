@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CartPizza from '../components/cartPizza';
-import { makeStyles } from '@material-ui/core/styles';
+import NavCat from '../components/NavCat';
+import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-
-import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import Drawer from '@material-ui/core/Drawer';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -17,9 +15,77 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import AppBar from '@material-ui/core/AppBar';
 import Cancel from '@material-ui/icons/Cancel';
+import axios from 'axios';
+import ShoppingCart from '@material-ui/icons/ShoppingCart';
+import Link from 'next/link'
+import cartReducer from '../lib/cartReducer';
+import {createStore} from 'redux';
+import {useSelector, useDispatch} from 'react-redux';
+let store =createStore(cartReducer)
+
+const add=(data)=>{
+    return{
+        type:'add',
+        data:data
+    }
+}
+const remove=()=>{
+    return{
+        type:'remove'
+    }
+}
+store.subscribe(() => {
+  console.log(store.getState()); // Some DOM api calls.
+});
+
+function CounterX(){
+  const counter =useSelector(state=> state.cartCount);
+  const dispatch =useDispatch();
+  return (
+    <div>
+        
+        ({counter})
+        
+    </div>
+
+  )
+}
+function cartTotal(){
+  const cartCount =useSelector(state=> state.cartCount);
+  return (
+    {cartCount}
+       
+
+  )
+}
+function Total(){
+  const carts =useSelector(state=> state.cartItem);
+  const cartTotal = (index) => {
+    let total =0; 
+    for(let d of carts)
+    {
+        total= total+ d.quantity*d.price;
+
+    }
+    return total;
+  };
+  return (
+    <Typography variant="h5" color="textSecondary" component="h5">
+                      Total ${cartTotal()}
+        </Typography>
+
+  )
+}
+const api = axios.create(
+  {
+    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+  }
+)
+
 const drawerWidth = 480;
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
   },
@@ -52,121 +118,126 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
   },
-}));
+});
 
-export default function Navbar(props) {
-  const classes = useStyles();
-  const { sections, title } = props;
-  const [open, setOpen] = React.useState(false);
+class Navbar extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      open: false,
+      users: [
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+      ],
+      filtered: [],
+      loading: true,
+      searchValue: '',
+      count:0
+    };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  }
 
+  totalItem (){
+    return store.getState().cartCount
+  }
 
-  return (
-    <React.Fragment>
-      <Toolbar className={classes.toolbar}>
-        <Button size="small">Subscribe</Button>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          className={classes.toolbarTitle}
-        >
-          {title}
-        </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-        <Button variant="outlined" size="small" onClick={handleDrawerOpen}>
-          Sign up
-        </Button>
-      </Toolbar>
-      <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
-        {sections.map((section) => (
-          <Link
-            color="inherit"
-            noWrap
-            key={section.title}
-            variant="body2"
-            href={section.url}
-            className={classes.toolbarLink}
-          >
-            {section.title}
-          </Link>
-        ))}
-      </Toolbar>
+  
 
-      <Drawer
-        className={classes.drawer}
-        anchor="right"
-        open={open}
-        
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-              <div className={classes.drawerContainer}>
-
-        <Card className={classes.root}>
-      <CardHeader
-        
-        action={
+  handleDrawerOpen = () => {
+    this.setState({ open: true })
+  }
+  handleDrawerClose = () => {
+    this.setState({ open: false })
+  }
+  componentDidMount()
+        {
           
-          <IconButton aria-label="settings" onClick={handleDrawerClose}>
-          <Cancel />
-        </IconButton>
+          
+          if(localStorage.getItem('token'))
+          localStorage.setItem('token','dfja;lsngpoiajofij');
+          else
+          {
+            localStorage.setItem('token','new');
+          }
         }
-        title="Cart"
-        subheader="Total Item"
-      />
-      <CardContent >
-      <Grid container spacing={3}>
-          <Grid item xs={6}>
 
- <Typography variant="h5" color="textSecondary" component="h5">
-          Total $6$
+  render() {
+
+    const { classes } = this.props;
+    
+    return (
+      <React.Fragment>
+        <AppBar className={classes.toolbar}>
+        <Toolbar >
+          <Link href="/"><Button size="small">Home</Button>
+          </Link>
+          <Typography
+            component="h2"
+            variant="h5"
+            color="inherit"
+            align="center"
+            noWrap
+            className={classes.toolbarTitle}
+          >
+            Pizza 
         </Typography>
-        </Grid>
-        <Grid item xs={6}>
-        <Button variant="contained" color="primary">
-  Checkout
+        
+          <Button variant="outlined" startIcon={<ShoppingCart />} size="small" onClick={this.handleDrawerOpen}>
+            Cart <CounterX></CounterX>
+        </Button>
+        </Toolbar>
+        </AppBar>
+        
+
+        <Drawer
+          className={classes.drawer}
+          anchor="right"
+          open={this.state.open}
+
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.drawerContainer}>
+
+            <Card className={classes.root}>
+              <CardHeader
+
+                action={
+
+                  <IconButton aria-label="settings" onClick={this.handleDrawerClose}>
+                    <Cancel />
+                  </IconButton>
+                }
+                title="Cart"
+                subheader="Total Item"
+              />
+              <CardContent >
+                <Grid container spacing={3}>
+                  <Grid item xs={6}>
+                  <Total></Total>
+                    
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button variant="contained" color="primary">
+                      Checkout
 </Button>
-</Grid>
-</Grid>
-      <div className={classes.drawerContainer}>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        </div>
-      </CardContent>
-      <CardActions disableSpacing>
-      
+                  </Grid>
+                </Grid>
+                <div className={classes.drawerContainer}>
+                  <CartPizza ></CartPizza>
 
-      </CardActions>
-      
-    </Card>
-    </div>
-       
-      </Drawer>
-    </React.Fragment>
-  );
+                </div>
+              </CardContent>
+              <CardActions disableSpacing>
+
+
+              </CardActions>
+
+            </Card>
+          </div>
+        </Drawer>
+      </React.Fragment>
+    );
+  }
 }
-
-Navbar.propTypes = {
-  sections: PropTypes.array,
-  title: PropTypes.string,
-};
+export default withStyles(styles)(Navbar);

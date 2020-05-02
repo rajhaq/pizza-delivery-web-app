@@ -29,6 +29,12 @@ Route::prefix('/app')->group(function () {
 
      
 });
+Route::prefix('/web')->group(function () {
+    Route::resource('/category', 'api\CategoryController');
+    Route::resource('/pizza', 'api\PizzaController');
+
+     
+});
 Route::post('/app/changepassword', 'dashboard\UserController@changePass');
 Route::post('/app/avatar','dashboard\UserController@avatar');
 Route::get('/app/profile', 'dashboard\UserController@profile');
