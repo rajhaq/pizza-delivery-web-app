@@ -13,8 +13,12 @@ import Grid from '@material-ui/core/Grid';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import cartReducer from '../lib/cartReducer';
-
-let store =createStore(cartReducer)
+import axios from 'axios';
+const api = axios.create(
+  {
+    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+  }
+)
 
 const add=(data)=>{
     return{
@@ -36,11 +40,22 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Index() {
+function App(props) {
   const classes = useStyles();
+  const [CartData,setCartData]=React.useState([]);
+  // api.get(`web/cart?token=${props.token}`)
+  //   .then(response=>{
+  //     setCartData(response.data)
+        
+  //   });
+
   return (
-    <Provider store={store}>
+    <Provider store={createStore(cartReducer, {
+      cartCount: props.token.length,
+      cartItem: props.token
+    })  }>
       <Navbar title="Blog" />
+      {props.token.lenght}
       
       <Card className={classes.root}>
         <CardActionArea>
@@ -56,4 +71,49 @@ export default function Index() {
       <PizzaCard></PizzaCard>
       </Provider>
   );
+}[];
+export default class Index extends React.Component {
+  constructor() {
+  super();
+  this.state = {
+    
+    token:[]
+  };
+
+}
+componentDidMount()
+      {
+        if(!localStorage.getItem('token'))
+        {
+          let guid = () => {
+              let s4 = () => {
+                  return Math.floor((1 + Math.random()) * 0x10000)
+                      .toString(16)
+                      .substring(1);
+              }
+              //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+              return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+          }
+          localStorage.setItem('token',guid());
+        }
+        else
+        {
+            api.get(`web/cart?token=${localStorage.getItem('token')}`)
+            .then(response=>{
+              this.setState({token:response.data})
+                
+            });
+        }       
+
+      }
+
+render() {
+
+  
+  return (
+    <div>
+      <App token={this.state.token}></App>
+    </div>
+  );
+}
 }

@@ -1,4 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
+import React from 'react'
+
 const initialState = {
   cartItem:[],
   cartCount:0
@@ -6,7 +8,11 @@ const initialState = {
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
-
+    case 'inital':
+      return {
+        cartCount: action.data.length,
+        cartItem: action.data
+      }
     case 'add':
       return {
         ...state,
@@ -43,7 +49,9 @@ const cartReducer = (state = initialState, action) => {
             cartItem: [
               ...state.cartItem.slice(0, action.index),
               ...state.cartItem.slice(action.index + 1)
+              
           ],
+          cartCount: state.cartCount - 1,
         }
       }
           

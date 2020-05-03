@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component ,useState} from 'react';
 import PropTypes from 'prop-types';
 import CartPizza from '../components/cartPizza';
 import NavCat from '../components/NavCat';
@@ -23,7 +23,6 @@ import Link from 'next/link'
 import cartReducer from '../lib/cartReducer';
 import {createStore} from 'redux';
 import {useSelector, useDispatch} from 'react-redux';
-let store =createStore(cartReducer)
 
 const add=(data)=>{
     return{
@@ -31,18 +30,30 @@ const add=(data)=>{
         data:data
     }
 }
+const inital=(data)=>{
+  return{
+      type:'inital',
+      data:data
+  }
+}
+const edit=(index,edit)=>{
+    return{
+        type:'edit',
+        index:index,
+        edit:edit
+    }
+}
 const remove=()=>{
     return{
         type:'remove'
     }
 }
-store.subscribe(() => {
-  console.log(store.getState()); // Some DOM api calls.
-});
 
-function CounterX(){
+
+function CounterX(props){
+  const [loading,setLoading]=useState(true);
   const counter =useSelector(state=> state.cartCount);
-  const dispatch =useDispatch();
+             
   return (
     <div>
         
@@ -52,14 +63,7 @@ function CounterX(){
 
   )
 }
-function cartTotal(){
-  const cartCount =useSelector(state=> state.cartCount);
-  return (
-    {cartCount}
-       
 
-  )
-}
 function Total(){
   const carts =useSelector(state=> state.cartItem);
   const cartTotal = (index) => {
@@ -104,6 +108,9 @@ const styles = (theme) => ({
     width: drawerWidth,
     flexShrink: 0,
   },
+  checkout: {
+    padding: 8,
+  },
   drawerPaper: {
     width: drawerWidth,
   },
@@ -118,6 +125,34 @@ const styles = (theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
   },
+  text: {
+    padding: theme.spacing(2, 2, 0),
+  },
+  paper: {
+    paddingBottom: 50,
+  },
+  list: {
+    marginBottom: theme.spacing(2),
+  },
+  subheader: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  appBar: {
+    top: 'auto',
+    bottom: 0,
+    width:480
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  fabButton: {
+    position: 'absolute',
+    zIndex: 1,
+    top: -30,
+    left: 0,
+    right: 0,
+    margin: '0 auto',
+  },
 });
 
 class Navbar extends React.Component {
@@ -131,7 +166,8 @@ class Navbar extends React.Component {
       filtered: [],
       loading: true,
       searchValue: '',
-      count:0
+      count:0,
+      token:""
     };
 
   }
@@ -148,16 +184,27 @@ class Navbar extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false })
   }
-  componentDidMount()
+  componentDidMount= () =>
         {
-          
-          
-          if(localStorage.getItem('token'))
-          localStorage.setItem('token','dfja;lsngpoiajofij');
+          if(!localStorage.getItem('token'))
+          {
+            let guid = () => {
+                let s4 = () => {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+            }
+            localStorage.setItem('token',guid());
+          }
           else
           {
-            localStorage.setItem('token','new');
+            this.setState({token:localStorage.getItem('token')})
           }
+          
+
         }
 
   render() {
@@ -166,8 +213,7 @@ class Navbar extends React.Component {
     
     return (
       <React.Fragment>
-        <AppBar className={classes.toolbar}>
-        <Toolbar >
+        <Toolbar className={classes.toolbar}>
           <Link href="/"><Button size="small">Home</Button>
           </Link>
           <Typography
@@ -182,10 +228,9 @@ class Navbar extends React.Component {
         </Typography>
         
           <Button variant="outlined" startIcon={<ShoppingCart />} size="small" onClick={this.handleDrawerOpen}>
-            Cart <CounterX></CounterX>
+            Cart <CounterX token={this.state.token}></CounterX>
         </Button>
         </Toolbar>
-        </AppBar>
         
 
         <Drawer
@@ -209,20 +254,9 @@ class Navbar extends React.Component {
                   </IconButton>
                 }
                 title="Cart"
-                subheader="Total Item"
               />
               <CardContent >
-                <Grid container spacing={3}>
-                  <Grid item xs={6}>
-                  <Total></Total>
-                    
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button variant="contained" color="primary">
-                      Checkout
-</Button>
-                  </Grid>
-                </Grid>
+
                 <div className={classes.drawerContainer}>
                   <CartPizza ></CartPizza>
 
@@ -234,6 +268,23 @@ class Navbar extends React.Component {
               </CardActions>
 
             </Card>
+            <AppBar position="fixed" color="" className={classes.appBar}>
+        <Toolbar>
+        <Grid container spacing={3} className={classes.checkout}>
+                  <Grid item xs={6}>
+                  <Total></Total>
+                    
+                  </Grid>
+                  <Grid item xs={6}>
+                  <Link href="/checkout">
+                    <Button variant="contained" color="primary">
+                      Checkout
+                    </Button>
+                    </Link>
+                  </Grid>
+                </Grid>
+        </Toolbar>
+      </AppBar>
           </div>
         </Drawer>
       </React.Fragment>

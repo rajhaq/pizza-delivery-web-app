@@ -18,7 +18,9 @@ import axios from 'axios';
 import cartReducer from '../lib/cartReducer';
 import {createStore} from 'redux';
 import {useSelector, useDispatch} from 'react-redux';
-let store =createStore(cartReducer)
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const add=(data)=>{
     return{
@@ -33,18 +35,69 @@ const remove=()=>{
 }
 
 function CounterX(props){
-    Object.assign(props.item, {quantity: 1});
-    Object.assign(props.item, {price: props.price});
-
+    
   const counter =useSelector(state=> state.cartCount);
   const dispatch =useDispatch();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = (data) => {
+    Object.assign(props.item, {quantity: 1});
+    Object.assign(props.item, {price: props.price});
+    Object.assign(props.item, {guest_id: localStorage.getItem('token')});
+    setOpen(true);    
+    api.post(`web/cart`, props.item)
+    .then(response=>{
+        console.log(response.data)
+        
+        dispatch(add(response.data.data))
+    });
+
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
-    <div>
-        <h4>
-        {counter}
-        </h4>
-        <button onClick={() => dispatch(add(props.item))}></button>
-    </div>
+  <div>
+        <Button 
+            className={styles.formControl}
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => {
+                
+                handleClick()
+                }
+            }
+            >
+            Add to Order
+        </Button>
+        <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Added to cart"
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              UNDO
+            </Button>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
+        </div>
+
 
   )
 }
@@ -184,8 +237,8 @@ class pizzaCard extends React.Component {
                         />
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography component="h5" variant="h5" align='center'>
-                        USD {this.ItemPrice(index)}
+                        <Typography component="h3" variant="h3" align='center'>
+                        ${this.ItemPrice(index)}
                                 </Typography>
                         </Grid>
                         </Grid>
@@ -233,17 +286,8 @@ class pizzaCard extends React.Component {
                             </div>
                             <div className={classes.controls}>
                                 <Button className={classes.formControl} variant="outlined">Customize</Button>
-                                <Button className={classes.formControl}
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    onClick={ (event) => { this.addToCart(index)}}
-                                >
-                                    Add to Order
-                                </Button>
-                                <CounterX item={section} price={this.ItemPrice(index)}>
-
-                                </CounterX>
+                                <CounterX item={section} price={this.ItemPrice(index)}></CounterX>
+                                
                             </div>
                         </div>
                     </Grid>

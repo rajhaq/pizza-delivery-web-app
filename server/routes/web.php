@@ -32,6 +32,7 @@ Route::prefix('/app')->group(function () {
 Route::prefix('/web')->group(function () {
     Route::resource('/category', 'api\CategoryController');
     Route::resource('/pizza', 'api\PizzaController');
+    Route::resource('/cart', 'api\CartController');
 
      
 });

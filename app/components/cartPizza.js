@@ -4,6 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 
 import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +15,12 @@ import SkipNextIcon from '@material-ui/icons/Add';
 import cartReducer from '../lib/cartReducer';
 import {createStore} from 'redux';
 import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
+const api = axios.create(
+  {
+    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+  }
+)
 let store =createStore(cartReducer)
 
 const add=(data)=>{
@@ -34,9 +41,7 @@ const remove=()=>{
         type:'remove'
     }
 }
-store.subscribe(() => {
-  console.log(store.getState()); // Some DOM api calls.
-});
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -66,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     height: 38,
     width: 38,
   },
+  
 }));
 
 export default function CartPizza() {
@@ -91,7 +97,13 @@ export default function CartPizza() {
       if(quantity>1)
         dispatch(edit(index,'reduce'))
         else
+        {
+           api.delete(`web/cart/${carts[index].id}`)
+    .then(response=>{
         dispatch(edit(index,'remove'))
+        
+    });
+        }
         
   };
   
@@ -100,13 +112,15 @@ export default function CartPizza() {
       <div>
     {carts.map((section,index) => (
     <Card className={classes.root} key={index}>
+        <Grid container spacing={3}>
+        <Grid item xs={6}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h6" variant="h6">
             {section.name}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-          {section.size}, {section.type}
+          Size: {section.size}, Type: {section.type}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
           
@@ -124,15 +138,21 @@ export default function CartPizza() {
             {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
           </IconButton>
         </div>
-        <Typography variant="h5" color="textSecondary">
-          {section.quantity*section.price}
+        <Typography variant="h5" color="textSecondary" align="center">
+          ${section.quantity*section.price}
           </Typography>
       </div>
+      </Grid>
+      <Grid item xs={6}>
       <CardMedia
         className={classes.cover}
         image={section.image}
         title="Live from space album cover"
       />
+        </Grid>
+    </Grid>
+
+
     </Card>
     ))}
     </div>

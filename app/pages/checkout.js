@@ -20,91 +20,110 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-  card: {
-    minWidth: 400,
-  },
-  media: {
-    height: 400,
-  },
-  formControl: {
-    minWidth: 250,
-    margin: 8
-  },
-  selectEmpty: {
-    marginTop:8
-  },
-  gridList: {
-    width: 500,
-    height: 450,
-  },
-  imagesOver: {
-    position: 'absolute'
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import cartReducer from '../lib/cartReducer';
 
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
+let store = createStore(cartReducer)
+
+const add = (data) => {
+    return {
+        type: 'add',
+        data: data
+    }
+}
+const remove = () => {
+    return {
+        type: 'remove'
+    }
+}
+
+const useStyles = makeStyles({
+    root: {
+        flexGrow: 1,
+    },
+    card: {
+        minWidth: 400,
+    },
+    media: {
+        height: 400,
+    },
+    formControl: {
+        minWidth: 250,
+        margin: 8
+    },
+    selectEmpty: {
+        marginTop: 8
+    },
+    gridList: {
+        width: 500,
+        height: 450,
+    },
+    imagesOver: {
+        position: 'absolute'
+
+    },
+    icon: {
+        color: 'rgba(255, 255, 255, 0.54)',
+    },
 });
 const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  ];
-  const tileData = [
-       {
-         img: 'https://storage.pizzahut.me/cdn-cgi/image/width=360,quality=75,format=auto,fit=cover,g=top/yum-resources/eb4ad1b2-e81d-4cb9-892b-ce07d90c8653/Images/ProductImages/Source/Beef_Regular.png',
-         title: 'Image',
-         author: 'author',
-       },
-      ];
+    { title: 'Technology', url: '#' },
+    { title: 'Design', url: '#' },
+    { title: 'Culture', url: '#' },
+    { title: 'Business', url: '#' },
+];
+const tileData = [
+    {
+        img: 'https://storage.pizzahut.me/cdn-cgi/image/width=360,quality=75,format=auto,fit=cover,g=top/yum-resources/eb4ad1b2-e81d-4cb9-892b-ce07d90c8653/Images/ProductImages/Source/Beef_Regular.png',
+        title: 'Image',
+        author: 'author',
+    },
+];
 export default function Index() {
-  const classes = useStyles();
-  const [age, setAge] = React.useState('');
+    const classes = useStyles();
+    const [age, setAge] = React.useState('');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-  return (
-    <Container fixed>
-        <Navbar title="Blog" sections={sections} />
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-        >
-        
-          <Typography component="h4" variant="h4">
-          Checkout
+    const handleChange = (event) => {
+        setAge(event.target.value);
+    };
+    return (
+        <Container fixed>
+            <Provider store={store}>
+                <Navbar title="Blog" sections={sections} />
+                <Grid
+                    container
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
+                >
+
+                    <Typography component="h4" variant="h4">
+                        Checkout
           </Typography>
-          </Grid>
-          <Grid container spacing={4}>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-            <CardContent>
-                <AddressForm></AddressForm>
-            </CardContent>
-        </Card>
-        </Grid>
-        <Grid item xs={6}>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
-        <CartPizza></CartPizza>
+                </Grid>
+                <Grid container spacing={4}>
+                    <Grid item xs={6}>
+                        <Card className={classes.card}>
+                            <CardContent>
+                                <AddressForm></AddressForm>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
+                        <CartPizza></CartPizza>
 
-        </Grid>
-        </Grid>
-
-    </Container>
-  );
+                    </Grid>
+                </Grid>
+            </Provider>
+        </Container>
+    );
 }

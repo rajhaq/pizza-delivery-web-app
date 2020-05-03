@@ -19,10 +19,12 @@ class CreateCartsTable extends Migration
             $table->string('guest_id')->nullable();
             $table->unsignedBigInteger('pizza_id')->nullable();
             $table->string('name')->nullable();
-            $table->integer('size')->nullable();
-            $table->integer('type')->nullable();
+            $table->string('image')->nullable();
+            $table->string('size')->nullable();
+            $table->string('type')->nullable();
             $table->integer('total_price')->nullable();
             $table->integer('qunatity')->nullable();
+            $table->text('note')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();
