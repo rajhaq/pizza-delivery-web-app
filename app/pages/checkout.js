@@ -23,22 +23,16 @@ import InfoIcon from '@material-ui/icons/Info';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import cartReducer from '../lib/cartReducer';
+import axios from 'axios';
+import React from 'react';
 
-let store = createStore(cartReducer)
-
-const add = (data) => {
-    return {
-        type: 'add',
-        data: data
+const api = axios.create(
+    {
+      baseURL: `http://192.168.1.118/pizza-app/server/public/`
     }
-}
-const remove = () => {
-    return {
-        type: 'remove'
-    }
-}
+  )
 
-const useStyles = makeStyles({
+  const useStyles = makeStyles({
     root: {
         flexGrow: 1,
     },
@@ -67,30 +61,18 @@ const useStyles = makeStyles({
         color: 'rgba(255, 255, 255, 0.54)',
     },
 });
-const sections = [
-    { title: 'Technology', url: '#' },
-    { title: 'Design', url: '#' },
-    { title: 'Culture', url: '#' },
-    { title: 'Business', url: '#' },
-];
-const tileData = [
-    {
-        img: 'https://storage.pizzahut.me/cdn-cgi/image/width=360,quality=75,format=auto,fit=cover,g=top/yum-resources/eb4ad1b2-e81d-4cb9-892b-ce07d90c8653/Images/ProductImages/Source/Beef_Regular.png',
-        title: 'Image',
-        author: 'author',
-    },
-];
-export default function Index() {
-    const classes = useStyles();
-    const [age, setAge] = React.useState('');
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
+
+function App(props) {
+    const classes = useStyles();
+
     return (
-        <Container fixed>
-            <Provider store={store}>
-                <Navbar title="Blog" sections={sections} />
+            <Provider store={createStore(cartReducer, {
+                cartCount: props.token.length,
+                cartItem: props.token
+            })}>
+                <Navbar />
+                <Container fixed>
                 <Grid
                     container
                     direction="column"
@@ -100,7 +82,7 @@ export default function Index() {
 
                     <Typography component="h4" variant="h4">
                         Checkout
-          </Typography>
+                    </Typography>
                 </Grid>
                 <Grid container spacing={4}>
                     <Grid item xs={6}>
@@ -111,19 +93,60 @@ export default function Index() {
                         </Card>
                     </Grid>
                     <Grid item xs={6}>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
-                        <CartPizza></CartPizza>
+                        <Card className={classes.card}>
+                            <CardContent>
+                                <Typography variant="h6" gutterBottom>
+                                    Cart
+                                </Typography>
+                                <CartPizza></CartPizza>
+                            </CardContent>
+                        </Card>
 
                     </Grid>
                 </Grid>
+                </Container>
             </Provider>
-        </Container>
     );
+}
+export default class Checkout extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+
+            cartItem: []
+        };
+
+    }
+    componentDidMount() {
+        if (!localStorage.getItem('token')) {
+            let guid = () => {
+                let s4 = () => {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+            }
+            localStorage.setItem('token', guid());
+        }
+        else {
+            api.get(`web/cart?token=${localStorage.getItem('token')}`)
+                .then(response => {
+                    this.setState({ cartItem: response.data })
+
+                });
+        }
+
+    }
+
+    render() {
+
+
+        return (
+            <div>
+                <App token={this.state.cartItem}></App>
+            </div>
+        );
+    }
 }

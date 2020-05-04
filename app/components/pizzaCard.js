@@ -28,6 +28,13 @@ const add=(data)=>{
         data:data
     }
 }
+const edit=(index,edit)=>{
+    return{
+        type:'edit',
+        index:index,
+        edit:edit
+    }
+}
 const remove=()=>{
     return{
         type:'remove'
@@ -36,21 +43,40 @@ const remove=()=>{
 
 function CounterX(props){
     
-  const counter =useSelector(state=> state.cartCount);
-  const dispatch =useDispatch();
+    const counter =useSelector(state=> state.cartCount);
+    const carts =useSelector(state=> state.cartItem);
+    const dispatch =useDispatch();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = (data) => {
     Object.assign(props.item, {quantity: 1});
     Object.assign(props.item, {price: props.price});
     Object.assign(props.item, {guest_id: localStorage.getItem('token')});
+    var temp=0;
+    var flag=true;
+    for(let d of carts )
+    {
+        if(props.item.size==d.size && props.item.type==d.type)
+        {
+            flag=false
+            dispatch(edit(temp,'add'))
+            api.put(`web/cart/${d.id}`,{quantity: d.quantity+1})
+            .then(response=>{
+                
+            }); 
+        }
+        temp++
+
+    }
+    if(flag){
+        api.post(`web/cart`, props.item)
+        .then(response=>{
+            console.log(response.data)
+            dispatch(add(response.data.data))
+        });
+    
+    }
     setOpen(true);    
-    api.post(`web/cart`, props.item)
-    .then(response=>{
-        console.log(response.data)
-        
-        dispatch(add(response.data.data))
-    });
 
   };
 
@@ -133,7 +159,7 @@ const styles = (theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 160,
+        minWidth: 150,
     },
     selectEmpty: {
         marginTop: theme.spacing(2),
@@ -225,7 +251,7 @@ class pizzaCard extends React.Component {
             <Grid item xs={6} key={index}>
                 
             <Card className={classes.root} variant="outlined">
-                <Grid container spacing={3}>
+                <Grid container spacing={1}>
                     <Grid item xs={5}>
                     <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -257,9 +283,9 @@ class pizzaCard extends React.Component {
                             </CardContent>
                             <div className={classes.controls}>
                                 <FormControl className={classes.formControl} variant="filled">
-                                    <InputLabel id="demo-simple-select-label">Size</InputLabel>
+                                    <InputLabel >Size</InputLabel>
                                     <Select
-                                        labelId="demo-simple-select-label"
+                                        label
                                         id="demo-simple-select"
                                         value={section.size}
                                         onChange={(e)=>this.handleChangeSize(index,e)}
@@ -270,9 +296,9 @@ class pizzaCard extends React.Component {
                                     </Select>
                                 </FormControl>
                                 <FormControl className={classes.formControl} variant="filled">
-                                    <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                                    <InputLabel >Type</InputLabel>
                                     <Select
-                                        labelId="demo-simple-select-label"
+                                        label
                                         id="demo-simple-select"
                                         value={section.type}
                                         onChange={(e)=>this.handleChangeType(index,e)}

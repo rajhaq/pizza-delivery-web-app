@@ -110,7 +110,28 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $response=array();
+        $response['status']=false;
+        $response['data'] ='';
+        // dd($request->all());
+
+        DB::beginTransaction();
+
+        try {
+            $response['data']=Cart::where('id',$id)->update(
+                [
+                    
+                    "quantity" => $request->quantity,
+                ]
+            );     
+            DB::commit();
+            $response['status'] = true;
+        } catch (\Exception $e) {
+            $response['data']=$e->getMessage()."line".$e->getLine();
+            DB::rollback();
+        }
+
+        return response()->json($response);
     }
 
     /**

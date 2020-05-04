@@ -105,9 +105,9 @@ export default function Index() {
           Chosse Size
         </Typography>
         <FormControl className={classes.formControl} variant="filled">
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel >Age</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
+          label
           id="demo-simple-select"
           value={age}
           onChange={handleChange}
@@ -122,9 +122,9 @@ export default function Index() {
           Choose Crust Type
         </Typography>
         <FormControl className={classes.formControl} variant="filled">
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel >Age</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
+          label
           id="demo-simple-select"
           value={age}
           onChange={handleChange}

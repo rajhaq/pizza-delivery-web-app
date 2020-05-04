@@ -268,7 +268,7 @@ class Navbar extends React.Component {
               </CardActions>
 
             </Card>
-            <AppBar position="fixed" color="" className={classes.appBar}>
+            <AppBar position="fixed" color="default" className={classes.appBar}>
         <Toolbar>
         <Grid container spacing={3} className={classes.checkout}>
                   <Grid item xs={6}>
