@@ -22,8 +22,8 @@ class CreateCartsTable extends Migration
             $table->string('image')->nullable();
             $table->string('size')->nullable();
             $table->string('type')->nullable();
-            $table->integer('total_price')->nullable();
-            $table->integer('qunatity')->nullable();
+            $table->integer('price')->nullable();
+            $table->integer('quantity')->nullable();
             $table->text('note')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();

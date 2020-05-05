@@ -10,4 +10,8 @@ class Order extends Model
 {
     use SoftDeletes;
     protected $guarded = [];
+    public function item()
+    {
+       return $this->HasMany('App\OrderItem');
+    }
 }

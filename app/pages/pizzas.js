@@ -1,12 +1,7 @@
 import Navbar from '../components/navbar.js';
 import Topping from '../components/Topping.js';
-import PizzaCard from '../components/pizzaCard.js';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -15,11 +10,16 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
+import {Provider} from 'react-redux';
+import cartReducer from '../lib/cartReducer';
+import {createStore} from 'redux';
+import axios from 'axios';
+const api = axios.create(
+  {
+    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+  }
+)
+
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -42,16 +42,15 @@ const useStyles = makeStyles({
     position: 'absolute'
 
   },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
   },
 });
-const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  ];
+
   const tileData = [
        {
          img: 'https://storage.pizzahut.me/cdn-cgi/image/width=360,quality=75,format=auto,fit=cover,g=top/yum-resources/eb4ad1b2-e81d-4cb9-892b-ce07d90c8653/Images/ProductImages/Source/Beef_Regular.png',
@@ -59,7 +58,7 @@ const sections = [
          author: 'author',
        },
       ];
-export default function Index() {
+function App(props) {
   const classes = useStyles();
   const [age, setAge] = React.useState('');
 
@@ -67,8 +66,13 @@ export default function Index() {
     setAge(event.target.value);
   };
   return (
+    <Provider store={createStore(cartReducer, {
+      cartCount: props.token.length,
+      cartItem: props.token
+    })  }>
     <Container fixed>
-        <Navbar title="Blog" sections={sections} />
+      
+        <Navbar/>
         <Grid
           container
           direction="column"
@@ -158,5 +162,51 @@ export default function Index() {
     </Grid>
 
     </Container>
+    </Provider>
   );
+}
+export default class Index extends React.Component {
+  constructor() {
+  super();
+  this.state = {
+    
+    token:[]
+  };
+
+}
+componentDidMount()
+      {
+        if(!localStorage.getItem('token'))
+        {
+          let guid = () => {
+              let s4 = () => {
+                  return Math.floor((1 + Math.random()) * 0x10000)
+                      .toString(16)
+                      .substring(1);
+              }
+              //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+              return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+          }
+          localStorage.setItem('token',guid());
+        }
+        else
+        {
+            api.get(`web/cart?token=${localStorage.getItem('token')}`)
+            .then(response=>{
+              this.setState({token:response.data})
+                
+            });
+        }       
+
+      }
+
+render() {
+
+  
+  return (
+    <div>
+      <App token={this.state.token}></App>
+    </div>
+  );
+}
 }

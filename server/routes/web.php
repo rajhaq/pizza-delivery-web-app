@@ -33,6 +33,8 @@ Route::prefix('/web')->group(function () {
     Route::resource('/category', 'api\CategoryController');
     Route::resource('/pizza', 'api\PizzaController');
     Route::resource('/cart', 'api\CartController');
+    Route::resource('/order', 'api\OrderController');
+    Route::resource('/topping', 'api\ToppingController');
 
      
 });

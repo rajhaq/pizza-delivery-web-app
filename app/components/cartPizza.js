@@ -132,9 +132,13 @@ export default function CartPizza() {
           <Typography variant="subtitle1" color="textSecondary">
           Size: {section.size}, Type: {section.type}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-          
+          {section.note? <div><Typography variant="subtitle1" color="default" >
+          Extra:
           </Typography>
+          <Typography variant="subtitle1" color="textSecondary" >
+          <span dangerouslySetInnerHTML={{__html: section.note}} />
+          </Typography></div>:""}
+          
         </CardContent>
         <div className={classes.controls}>
           <IconButton aria-label="previous" onClick={() => removeQuantity(index,section.quantity)}>

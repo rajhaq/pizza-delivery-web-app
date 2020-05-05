@@ -21,6 +21,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Link from 'next/link'
 
 const add=(data)=>{
     return{
@@ -311,9 +312,10 @@ class pizzaCard extends React.Component {
                                 </FormControl>
                             </div>
                             <div className={classes.controls}>
-                                <Button className={classes.formControl} variant="outlined">Customize</Button>
+                                <Link href={"pizza/"+section.id}>
+                                    <Button className={classes.formControl} variant="outlined">Customize</Button>
+                                    </Link>
                                 <CounterX item={section} price={this.ItemPrice(index)}></CounterX>
-                                
                             </div>
                         </div>
                     </Grid>
@@ -325,4 +327,5 @@ class pizzaCard extends React.Component {
     );
 }
 }
+
 export default withStyles(styles)(pizzaCard);

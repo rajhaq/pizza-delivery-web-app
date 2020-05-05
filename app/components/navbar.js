@@ -56,9 +56,7 @@ function CounterX(props){
              
   return (
     <div>
-        
-        ({counter})
-        
+        ({counter})        
     </div>
 
   )

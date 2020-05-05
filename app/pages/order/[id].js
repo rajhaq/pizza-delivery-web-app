@@ -1,8 +1,6 @@
-import Navbar from '../components/navbar.js';
-import AddressForm from '../components/AddressForm.js';
-import CartPizza from '../components/cartPizza.js';
+import Navbar from '../../components/navbar.js';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
+import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -23,10 +21,12 @@ import InfoIcon from '@material-ui/icons/Info';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {useSelector, useDispatch} from 'react-redux';
-
-import cartReducer from '../lib/cartReducer';
+import {useRouter} from 'next/router';
+import { useState, useEffect } from 'react';
+import cartReducer from '../../lib/cartReducer';
 import axios from 'axios';
 import React from 'react';
+
 
 const api = axios.create(
     {
@@ -39,7 +39,8 @@ const api = axios.create(
         flexGrow: 1,
     },
     card: {
-        minWidth: 400,
+        margin: 16,
+        padding: 16,
     },
     media: {
         height: 400,
@@ -65,26 +66,51 @@ const api = axios.create(
 });
 
 
-function Total(){
-    const carts =useSelector(state=> state.cartItem);
-    const cartTotal = (index) => {
-      let total =0; 
-      for(let d of carts)
-      {
-          total= total+ d.quantity*d.price;
-  
-      }
-      return total;
-    };
-    return (
-      <Typography variant="h5" color="textSecondary" component="h5">
-                        Total ${cartTotal()}
-          </Typography>
-  
-    )
-  }
+
 function App(props) {
     const classes = useStyles();
+    const router = useRouter();
+    const [order, setOrder] = useState({
+        item:[]
+    });
+    const [initialized, setInitialized] = useState(false);
+    const {id} =router.query;
+    const getNewPhotos =  () => {
+        api.get(`web/order/${id}`)
+        .then(response=>{
+            setOrder(response.data) 
+            setInitialized(true);            
+        }).catch(error=>{
+        });
+        
+    } 
+    useEffect(() => {
+        if (!initialized) {
+            getNewPhotos();
+        }
+    });        
+const orderStatus = () => {
+    if(order.status==1)
+    {
+        return "On Process"
+    }
+    else if(order.status==2)
+    {
+        return "On Way"
+    }
+    if(order.status==3)
+    {
+        return "Delivered"
+    }
+    if(order.status==0)
+    {
+        return "Cancelled"
+    }
+    else return "Error"
+            
+};
+
+    
 
     return (
             <Provider store={createStore(cartReducer, {
@@ -100,36 +126,72 @@ function App(props) {
                     alignItems="center"
                 >
 
-                    <Typography component="h4" variant="h4">
-                        Checkout
+<Typography component="h4" variant="h4">
+                        Order # {id}
+                    </Typography>
+                    <Typography component="h6" variant="h6">
+                        Order status : {orderStatus()}
+                    </Typography>
+                    <Typography component="p" variant="p">
+                        Bookmark this page for order tracking
                     </Typography>
                 </Grid>
                 <Grid container spacing={4}>
                     <Grid item xs={6}>
                         <Card className={classes.card}>
-                            <CardContent>
-                                <AddressForm></AddressForm>
-                            </CardContent>
-                        </Card>
+                        <CardHeader
+                        title="Customer information"
+                    />
+                    <Typography component="p" variant="p">
+                        Name:
+                    </Typography>
+                    <Typography component="h6" variant="h6">
+                        {order.name}
+                    </Typography>
+                    <Typography component="p" variant="p">
+                        Address:
+                    </Typography>
+                    <Typography component="h6" variant="h6">
+                        {order.address}
+                    </Typography>
+                    <Typography component="p" variant="p">
+                        Phone:
+                    </Typography>
+                    <Typography component="h6" variant="h6">
+                        {order.number}
+                    </Typography>
+           
+                    </Card>
                     </Grid>
                     <Grid item xs={6}>
-                        <Card className={classes.card}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>
-                                    Cart
-                                </Typography>
-                                <Total></Total>
-                                <CartPizza></CartPizza>
-                            </CardContent>
-                        </Card>
-
+                    <Card className={classes.card}>
+                    <CardHeader
+                        title="Order items"
+                    />
+                    {order.item && order.item.length > 0
+        ?order.item.map((item,index) => {
+            return(
+                        <div key={index}>
+                        <Typography component="h6" variant="h6">
+                           {index+1}. {item.name}
+                        </Typography>
+                        <Typography component="p" variant="p">
+                       x {item.quantity}
+                    </Typography>
+                        </div>
+                        )
+                    }): "Loading..."}
+                    <Typography component="h6" variant="h6">
+                        Total amount ${order.total_price}
+                    </Typography>
+                    </Card>
                     </Grid>
                 </Grid>
                 </Container>
             </Provider>
     );
 }
-export default class Checkout extends React.Component {
+export default class Order extends React.Component {
     constructor() {
         super();
         this.state = {

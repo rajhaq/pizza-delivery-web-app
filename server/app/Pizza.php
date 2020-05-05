@@ -12,7 +12,7 @@ class Pizza extends Model
     protected $guarded = [];
     public function topping()
     {
-       return $this->HasMany('App\PizzaTopping');
+       return $this->belongsTomany('App\Topping', 'pizza_toppings', 'pizza_id', 'topping_id');
     }
 }
 

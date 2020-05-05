@@ -4,9 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Pizza;
-
-class PizzaController extends Controller
+use App\Topping;
+class ToppingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,13 +14,7 @@ class PizzaController extends Controller
      */
     public function index()
     {
-        $data=Pizza::orderBy('id','ASC');    
-        if(isset($request->type) && !empty($request->type))
-        {
-            $data= $data->where('type',$request->type);
-        }
-        $data= $data->get();
-        return $data;
+        return Topping::where('status',1)->get();
     }
 
     /**
@@ -53,11 +46,7 @@ class PizzaController extends Controller
      */
     public function show($id)
     {
-        $data=Pizza::where('id',$id)
-        ->with('topping')
-        ->first();
-        // dd($data);
-        return $data;
+        //
     }
 
     /**

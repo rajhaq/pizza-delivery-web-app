@@ -18,10 +18,11 @@ class CreateOrderItemsTable extends Migration
             $table->unsignedBigInteger('order_id')->nullable();
             $table->unsignedBigInteger('pizza_id')->nullable();
             $table->string('name')->nullable();
-            $table->integer('size')->nullable();
-            $table->integer('type')->nullable();
-            $table->integer('total_price')->nullable();
-            $table->integer('qunatity')->nullable();
+            $table->string('size')->nullable();
+            $table->string('type')->nullable();
+            $table->integer('price')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->text('note')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
