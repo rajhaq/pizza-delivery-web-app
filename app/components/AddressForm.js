@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const api = axios.create(
   {
-    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+    baseURL: `http://adminpizza.salwagarden.com/`
   }
 )
 function Add(props){
@@ -76,7 +76,7 @@ function Add(props){
                 setLoading(false);
                 setMessage('Successfully Ordered');  
                 setOpen(true);
-                router.push('/order/'+response.data.data.id)
+                router.push('/order/[id]', `/order/${response.data.data.id}`);
 
               }
               else{

@@ -14,9 +14,10 @@ import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import cartReducer from '../lib/cartReducer';
 import axios from 'axios';
+import Head from 'next/head';
 const api = axios.create(
   {
-    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+    baseURL: `http://adminpizza.salwagarden.com/`
   }
 )
 
@@ -57,7 +58,7 @@ function App(props) {
         </CardActionArea>
       </Card>
       <Container fixed>
-      <NavCat></NavCat>
+      
       <PizzaCard></PizzaCard>
       </Container>
       </Provider>
@@ -103,6 +104,12 @@ render() {
   
   return (
     <div>
+      <Head>
+        <title>Home | Zero Pizza</title>
+        <meta name="description" content="Free Web tutorials"></meta>
+        <meta name="keywords" content="Order pizza online at Zero Pizza. Access online food delivery near you including pizza from the Zero Pizza, Germany."></meta>
+        <meta name="title" content="Home | Zero Pizza"></meta>
+      </Head>
       <App token={this.state.token}></App>
     </div>
   );

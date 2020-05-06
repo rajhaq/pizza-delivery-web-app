@@ -15,6 +15,18 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <style>
+    .no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+#se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(/Preloader_2.gif) center no-repeat #fff;
+}</style>
     <script>
 
     
@@ -33,7 +45,17 @@
     <!-- Styles -->
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
 </head>
-<body>        
+<body>     
+<div id="se-pre-con"></div>   
     @yield('content')
+    <script>
+    window.addEventListener('load', function() {
+        var s = document.getElementById('se-pre-con').style;
+        s.opacity = 1;
+        (function fade(){(s.opacity-=.1)<0?s.display="none":setTimeout(fade,40)})();
+            // $(".se-pre-con").fadeOut("slow");
+        })
+
+</script>
 </body>
 </html>

@@ -20,7 +20,7 @@ import axios from 'axios';
 
 const api= axios.create(
   {
-    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+    baseURL: `http://adminpizza.salwagarden.com/`
   }
 )
 const drawerWidth = 480;

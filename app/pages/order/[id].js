@@ -26,11 +26,12 @@ import { useState, useEffect } from 'react';
 import cartReducer from '../../lib/cartReducer';
 import axios from 'axios';
 import React from 'react';
+import Head from 'next/head';
 
 
 const api = axios.create(
     {
-      baseURL: `http://192.168.1.118/pizza-app/server/public/`
+      baseURL: `http://adminpizza.salwagarden.com/`
     }
   )
 
@@ -228,6 +229,13 @@ export default class Order extends React.Component {
 
         return (
             <div>
+            <Head>
+                <title>Order | Zero Pizza</title>
+                <meta name="description" content="Order pizza online at Zero Pizza. Access online food delivery near you including pizza from the Zero Pizza, Germany."></meta>
+                <meta name="keywords" content="Order pizza online at Zero Pizza. Access online food delivery near you including pizza from the Zero Pizza, Germany."></meta>
+                <meta name="title" content="Checkout | Zero Pizza"></meta>
+            </Head>
+
                 <App token={this.state.cartItem}></App>
             </div>
         );

@@ -18,7 +18,7 @@ class PizzaController extends Controller
         {
             $data= $data->where('type',$request->type);
         }
-        $data= $data->get();
+        $data= $data->with('toppings')->get();
         return $data;
     }
     public function create()
@@ -72,7 +72,7 @@ class PizzaController extends Controller
                     // dd($product['quantity']);
                     PizzaTopping::create([
                         'pizza_id' => $response['data']->id,
-                        'topping_id' => $topping,
+                        'topping_id' => $topping['id'],
                     ]);
                 }
             }      
@@ -142,14 +142,14 @@ class PizzaController extends Controller
                     // dd($product['quantity']);
                     PizzaTopping::create([
                         'pizza_id' => $id,
-                        'topping_id' => $topping,
+                        'topping_id' => $topping['id'],
                     ]);
                 }
             }            
             DB::commit();
             $response['status'] = true;
         } catch (\Exception $e) {
-            $response['data']=$e->getMessage()."line".$e->getLine();
+            $response['data']=$e->getMessage()."line ".$e->getLine();
             DB::rollback();
         }
 

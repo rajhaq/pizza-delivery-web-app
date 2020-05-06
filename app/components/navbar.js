@@ -82,7 +82,7 @@ function Total(){
 }
 const api = axios.create(
   {
-    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+    baseURL: `http://adminpizza.salwagarden.com/`
   }
 )
 
@@ -222,7 +222,7 @@ class Navbar extends React.Component {
             noWrap
             className={classes.toolbarTitle}
           >
-            Pizza 
+            Zero Pizza 
         </Typography>
         
           <Button variant="outlined" startIcon={<ShoppingCart />} size="small" onClick={this.handleDrawerOpen}>

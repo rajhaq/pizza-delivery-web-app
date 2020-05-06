@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import dashboard from './components/dashboard/overview/Home.vue'
 import overview from './components/dashboard/overview/overview.vue'
+import today from './components/dashboard/overview/today.vue'
 
 import user from './components/dashboard/user/Home.vue'
 import userlist from './components/dashboard/user/userlist.vue'
@@ -28,7 +29,7 @@ export default new Router({
             component: dashboard,
             meta: {
                 icon: 'dashboard',
-                title: "Dashboard",
+                title: "Oarder",
                 type: allUser,
                 status: true,
             },
@@ -39,7 +40,7 @@ export default new Router({
                     component: overview,
                     meta: {
                         icon: 'dashboard',
-                        title: "Overview",
+                        title: "Order List",
                         type: allUser,
                         status: true,
         
@@ -48,7 +49,7 @@ export default new Router({
                 {
                     path: 'today',
                     name: 'today',
-                    component: overview,
+                    component: today,
                     meta: {
                         icon: 'dashboard',
                         title: "Today",

@@ -26,6 +26,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Head from 'next/head';
 
 const add = (data) => {
     return {
@@ -33,22 +34,11 @@ const add = (data) => {
         data: data
     }
 }
-const edit = (index, edit) => {
-    return {
-        type: 'edit',
-        index: index,
-        edit: edit
-    }
-}
-const remove = () => {
-    return {
-        type: 'remove'
-    }
-}
+
 
 const api = axios.create(
     {
-        baseURL: `http://192.168.1.118/pizza-app/server/public/`
+        baseURL: `http://adminpizza.salwagarden.com/`
     }
 )
 const useStyles = makeStyles((theme) => ({
@@ -81,6 +71,10 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         minWidth: 200,
     },
+    card:{
+        padding:8,
+        margin:8
+    }
 }));
 
 function CounterX(props) {
@@ -88,25 +82,23 @@ function CounterX(props) {
     const carts = useSelector(state => state.cartItem);
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
-    const handleClick = (data) => {
-        Object.assign(props.item, { quantity: 1 });
-        Object.assign(props.item, { price: props.price });
-        Object.assign(props.item, { guest_id: localStorage.getItem('token') });
+    const handleClick = () => {
+        
+        const newProps = Object.assign({}, props);
+        Object.assign(newProps.item, { quantity: 1 });
+        Object.assign(newProps.item, { price: newProps.price });
+        Object.assign(newProps.item, { guest_id: localStorage.getItem('token') });
         var note = "";
-        for (let d of props.topping) {
+        for (let d of newProps.topping) {
             note = note + d.name + "<br/>";
         }
-        Object.assign(props.item, { note: note });
-        var flag = true;
-        for (let d of carts) {
-            api.post(`web/cart`, props.item)
+        Object.assign(newProps.item, { note: note });
+            api.post(`web/cart`, newProps.item)
                 .then(response => {
                     console.log(response.data)
                     dispatch(add(response.data.data))
 
                 });
-
-        }
         setOpen(true);
 
     };
@@ -145,10 +137,7 @@ function CounterX(props) {
                 message="Added to cart"
                 action={
                     <React.Fragment>
-                        <Button color="secondary" size="small" onClick={handleClose}>
-                            UNDO
-            </Button>
-                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                        <IconButton size="small"  color="inherit" onClick={handleClose}>
                             <CloseIcon fontSize="small" />
                         </IconButton>
                     </React.Fragment>
@@ -298,7 +287,7 @@ function App(props) {
                             </Grid>
                             <Grid item xs={12} >
                                 <div>
-                                    <img className={classes.imagesOver} src="https://storage.pizzahut.me/cdn-cgi/image/width=360,quality=75,format=auto,fit=cover,g=top/yum-resources/eb4ad1b2-e81d-4cb9-892b-ce07d90c8653/Images/ProductImages/Source/Crust_Pan.png" alt="image 1" />
+                                    <img className={classes.imagesOver} src={pizza.base_image} alt="image 1" />
                                     {newTopping && newTopping.length > 0 ? newTopping.map((section, index) => {
                                         return (
                                             <img className={classes.imagesOver} src={section.image} alt={section.name} />
@@ -311,17 +300,13 @@ function App(props) {
 
                     </Grid>
                     <Grid item xs={6} >
-                        <Card>
+                        <Card className={classes.card} >
                             <CardContent>
                                 <CounterX item={pizza} topping={newTopping} price={ItemPrice()}></CounterX>
-                                <Typography variant="h6" component="h6">
-                                    Choose Size
-          </Typography>
+                       
                                 <FormControl className={classes.formControl} variant="filled">
                                     <InputLabel >Size</InputLabel>
                                     <Select
-                                        label
-                                        id="demo-simple-select"
                                         value={pizza.size}
                                         onChange={(e) => handleChangeSize(e)}
                                     >
@@ -333,7 +318,6 @@ function App(props) {
                                 <FormControl className={classes.formControl} variant="filled">
                                     <InputLabel >Type</InputLabel>
                                     <Select
-                                        label
                                         value={pizza.type}
                                         onChange={(e) => handleChangeType(e)}
                                     >
@@ -343,9 +327,18 @@ function App(props) {
                                         <MenuItem value='sfo'>SFO</MenuItem>
                                     </Select>
                                 </FormControl>
+                                <Typography variant="subtitle1" >
+                                    Included toppings:
+                            </Typography>
+                            {pizza.topping && pizza.topping.length > 0 ? pizza.topping.map((section, index) => {
+                                        return (
+                                        <span>{section.name}, </span>
+
+                                        )
+                                    }) : ""}
                             </CardContent>
                         </Card>
-                        <Card className={classes.root}>
+                        <Card className={classes.card} >
                             <Typography variant="h6" component="h6">
                                 Choose Toppings
           </Typography>
@@ -434,6 +427,13 @@ export default class Pizza extends React.Component {
 
         return (
             <div>
+                <Head>
+                <title>Pizza | Zero Pizza</title>
+                <meta name="description" content="Order pizza online at Zero Pizza. Access online food delivery near you including pizza from the Zero Pizza, Germany."></meta>
+                <meta name="keywords" content="Order pizza online at Zero Pizza. Access online food delivery near you including pizza from the Zero Pizza, Germany."></meta>
+                <meta name="title" content="Checkout | Zero Pizza"></meta>
+            </Head>
+
                 <App token={this.state.cartItem}></App>
             </div>
         );

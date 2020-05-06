@@ -130,7 +130,7 @@ function CounterX(props){
 }
 const api = axios.create(
   {
-    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+    baseURL: `http://adminpizza.salwagarden.com/`
   }
 )
 const styles = (theme) => ({
@@ -286,8 +286,6 @@ class pizzaCard extends React.Component {
                                 <FormControl className={classes.formControl} variant="filled">
                                     <InputLabel >Size</InputLabel>
                                     <Select
-                                        label
-                                        id="demo-simple-select"
                                         value={section.size}
                                         onChange={(e)=>this.handleChangeSize(index,e)}
                                     >
@@ -299,8 +297,6 @@ class pizzaCard extends React.Component {
                                 <FormControl className={classes.formControl} variant="filled">
                                     <InputLabel >Type</InputLabel>
                                     <Select
-                                        label
-                                        id="demo-simple-select"
                                         value={section.type}
                                         onChange={(e)=>this.handleChangeType(index,e)}
                                     >
@@ -312,7 +308,7 @@ class pizzaCard extends React.Component {
                                 </FormControl>
                             </div>
                             <div className={classes.controls}>
-                                <Link href={"pizza/"+section.id}>
+                                <Link href="/pizza/[id]" as={`pizza/${section.id}`}>
                                     <Button className={classes.formControl} variant="outlined">Customize</Button>
                                     </Link>
                                 <CounterX item={section} price={this.ItemPrice(index)}></CounterX>

@@ -84,12 +84,19 @@ class ToppingController extends Controller
 
         try {
             $response['data']=Topping::where('id',$id)
-            ->update($request->all());           
+            ->update(
+                [
+                    'name'=>$request->name,
+                    'image'=>$request->image,
+                    'price'=>$request->price,
+                    'status'=>$request->status
+                ]
+            );           
             DB::commit();
             $response['status'] = true;
         } catch (\Exception $e) {
-            $data=$e->getMessage();
-            $status = false;
+            $response['data']=$e->getMessage().', Line: '.$e->getLine();
+            $response['status'] = true;
             DB::rollback();
         }
 

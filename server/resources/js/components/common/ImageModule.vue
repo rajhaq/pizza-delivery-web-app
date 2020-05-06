@@ -318,6 +318,7 @@ export default {
                     url: "/app/image",
                     data: formData
                 });
+
                 if(data.status)
                 {
                     for(let d of data.data)
@@ -330,11 +331,13 @@ export default {
                 {
                     this.snacks("Failed! "+data.data,"red")
                 }
+                this.files=[]
                 this.loading=false;
 
             } catch (e) {
                 this.snacks("Operation Failed!" +e, "red");
                 this.loading=false;
+                this.files=[]
             }
         },
         editItem(item,index) {

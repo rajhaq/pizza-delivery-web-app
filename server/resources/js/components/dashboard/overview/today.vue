@@ -117,6 +117,7 @@
 				</v-col>
 			</v-row>
 			<OrderView :trigger="isView" :orderData="editedItem"></OrderView>
+			
 		</v-container>
 		
 		<v-snackbar
@@ -160,8 +161,8 @@ export default {
         {
             category_id:null,
 			branch_id:null,
-			start:'',
-			end:'',
+			start:new Date().toISOString().substr(0, 10),
+			end:new Date().toISOString().substr(0, 10),
 			page: 1,
 			show: 50,
         },

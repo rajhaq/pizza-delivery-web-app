@@ -18,7 +18,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import axios from 'axios';
 const api = axios.create(
   {
-    baseURL: `http://192.168.1.118/pizza-app/server/public/`
+    baseURL: `http://adminpizza.salwagarden.com/`
   }
 )
 let store =createStore(cartReducer)
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cover: {
     width: 180,
-    width: 180,
+    height: 180,
   },
   controls: {
     display: 'flex',
@@ -159,7 +159,7 @@ export default function CartPizza() {
       
       <CardMedia
         className={classes.cover}
-        image='https://storage.pizzahut.me/cdn-cgi/image/width=175,height=175,quality=75,format=auto,fit=cover,g=top/yum-resources/eb4ad1b2-e81d-4cb9-892b-ce07d90c8653/Images/ProductImages/Source/pizzashrimp.png'
+        image={section.image}
       />
 
 

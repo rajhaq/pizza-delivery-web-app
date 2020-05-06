@@ -144,7 +144,6 @@
 									<v-text-field
 										v-model="editedItem.pan"
 										label="Pan*"
-										:rules="[v => !!v || 'Pan is required']"
                                         required
 										outlined
 										hint="Extra price amount"
@@ -154,7 +153,6 @@
 									<v-text-field
 										v-model="editedItem.thin"
 										label="Thin N Crispy*"
-										:rules="[v => !!v || 'Thin N Crispy is required']"
                                         required
 										outlined
 									></v-text-field>
@@ -163,7 +161,6 @@
 									<v-text-field
 										v-model="editedItem.cheesy"
 										label="Cheesy Crunch*"
-										:rules="[v => !!v || 'Cheesy Crunch is required']"
                                         required
 										outlined
 									></v-text-field>
@@ -172,7 +169,6 @@
 									<v-text-field
 										v-model="editedItem.sfo"
 										label="SFO*"
-										:rules="[v => !!v || 'SFO is required']"
                                         required
 										outlined
 									></v-text-field>
@@ -186,7 +182,7 @@
 										v-model="editedItem.toppings"
 										:items="dataTopping"
 										item-text="name"
-										item-value="id"
+										return-object
 										:rules="[v => !!v || 'Topping is required']"
 										label="Toppings*"
 										chips
@@ -230,7 +226,7 @@
 										justify="center"
 									>
 									<v-img
-                                    :src="editedItem.base_image?editedItem.image:'/images/plus.png'"
+                                    :src="editedItem.base_image?editedItem.base_image:'/images/plus.png'"
                                     aspect-ratio="1"
 									@click="isImageBase=!isImageBase"
                                     >
@@ -338,30 +334,30 @@ export default {
 			description: "",
 			image: "",
 			base_image: "",			
-			large: "",
-			medium: "",
-			small: "",
-			pan: "",
-			thin: "",
-			cheesy: "",
-			sfo: "",
+			large: 20,
+			medium: 15,
+			small: 10,
+			pan: 0,
+			thin: 2,
+			cheesy: 5,
+			sfo: 1,
 			toppings:[],
 			status: 1
 		},
 		defaultItem: {
-						user_id: "",
+			user_id: "",
 			category_id: "",
 			name: "",
 			description: "",
 			image: "",
 			base_image: "",			
-			large: "",
-			medium: "",
-			small: "",
-			pan: "",
-			thin: "",
-			cheesy: "",
-			sfo: "",
+			large: 20,
+			medium: 15,
+			small: 10,
+			pan: 0,
+			thin: 2,
+			cheesy: 5,
+			sfo: 1,
 			toppings:[],
 			status: 1
 		},
@@ -402,8 +398,8 @@ export default {
 		},
 		cancel()
 		{
-			this.isImage=!this.isImage;
-			this.isBaseImage=!this.isBaseImage;
+			this.isImage=false;
+			this.isImageBase=false;
 
 		},
 		async initialize() {

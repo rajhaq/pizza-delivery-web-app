@@ -3,6 +3,7 @@ window.Vue = require('vue');
 import vuetify from './plugins/vuetify' // path to vuetify export
 
 import common from './common';
+Vue.use(require('vue-moment'));
 
 Vue.mixin(common);
 // import 'babel-polyfill';
@@ -11,7 +12,7 @@ require('es6-promise').polyfill();
 
 router.afterEach((to, from) => {
     Vue.nextTick(() => {
-        document.title = to.meta.title ? to.meta.title : 'OneQatar.qa';
+        document.title = to.meta.title ? to.meta.title : 'Zero Pizza';
     });
 })
 /**
