@@ -32,7 +32,7 @@
         "es6-promise": "^4.2.8",
         "vue-moment": "^4.1.0",
         "vue-router": "^3.1.6",
-        "vuetify": "^2.2.25",
+        "vuetify": "^2.6.10",
         "vuex": "^3.3.0"
     }
 }
